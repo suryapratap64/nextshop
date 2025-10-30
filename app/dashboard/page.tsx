@@ -2,7 +2,6 @@ import { Product } from "@/lib/products";
 import { connectDB } from "@/lib/db";
 import ProductTable from "@/components/ProductTable";
 
-import { IProduct } from "@/types/product";
 
 export const dynamic = "force-dynamic"; // SSR
 

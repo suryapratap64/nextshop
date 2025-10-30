@@ -1,20 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import { IProduct } from "@/types/product";
+import { IProductResponse, UpdateProductInput } from "@/types/product";
 
 type ProductTableProps = {
-  initialProducts: IProduct[];
+  initialProducts: IProductResponse[];
 };
 
 export default function ProductTable({ initialProducts }: ProductTableProps) {
   const [products, setProducts] = useState(initialProducts);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState<Partial<IProduct>>({});
+  const [editForm, setEditForm] = useState<UpdateProductInput>({});
 
-  const handleEdit = (product: IProduct) => {
+  const handleEdit = (product: IProductResponse) => {
     setEditingId(product._id);
-    setEditForm(product);
+    // Only include editable fields
+    setEditForm({
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      category: product.category,
+      inventory: product.inventory,
+    });
   };
 
   const handleCancel = () => {
@@ -36,7 +43,7 @@ export default function ProductTable({ initialProducts }: ProductTableProps) {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          key:process.env.ADMIN_KEY || "",
+          key: process.env.NEXT_PUBLIC_ADMIN_KEY || "",
         },
         body: JSON.stringify(editForm),
       });
@@ -63,7 +70,7 @@ export default function ProductTable({ initialProducts }: ProductTableProps) {
             <th className="px-6 py-3">Name</th>
             <th className="px-6 py-3">Price</th>
             <th className="px-6 py-3">Inventory</th>
-            <th className="px-6 py-3">Actions</th>
+            {/* <th className="px-6 py-3">Actions</th> */}
           </tr>
         </thead>
         <tbody>
@@ -111,7 +118,7 @@ export default function ProductTable({ initialProducts }: ProductTableProps) {
                   product.inventory
                 )}
               </td>
-              <td className="px-6 py-4">
+              {/* <td className="px-6 py-4">
                 {editingId === product._id ? (
                   <div className="space-x-2">
                     <button
@@ -135,7 +142,7 @@ export default function ProductTable({ initialProducts }: ProductTableProps) {
                     Edit
                   </button>
                 )}
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>

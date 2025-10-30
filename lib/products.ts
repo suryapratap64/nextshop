@@ -1,6 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
+import { IProductDocument } from "@/types/product";
 
-const productSchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema<IProductDocument>({
   name: { type: String, required: true },
   slug: { type: String, required: true, unique: true },
   description: { type: String, required: true },
@@ -21,5 +22,6 @@ productSchema.pre("save", function (next) {
   next();
 });
 
-export const Product =
-  mongoose.models.Product || mongoose.model("Product", productSchema);
+export const Product: Model<IProductDocument> =
+  mongoose.models.Product ||
+  mongoose.model<IProductDocument>("Product", productSchema);

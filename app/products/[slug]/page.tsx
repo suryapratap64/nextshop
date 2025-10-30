@@ -10,11 +10,11 @@ export async function generateStaticParams() {
   return products.map((p: any) => ({ slug: p.slug }));
 }
 
-export default async function ProductDetail({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+interface ProductDetailProps {
+  params: { slug: string };
+}
+
+export default async function ProductDetail({ params }: ProductDetailProps) {
   await connectDB();
   const { slug } = await params;
   const product = await Product.findOne({ slug }).lean();
@@ -23,18 +23,23 @@ export default async function ProductDetail({
     return (
       <div className="max-w-4xl mx-auto p-6 text-center">
         <div className="bg-gray-900 border border-gray-800 rounded-lg p-12">
-          <h2 className="text-2xl font-bold text-white mb-2">Product Not Found</h2>
-          <p className="text-gray-400">The product you're looking for doesn't exist.</p>
+          <h2 className="text-2xl font-bold text-white mb-2">
+            Product Not Found
+          </h2>
+          <p className="text-gray-400">
+            The product you're looking for doesn't exist.
+          </p>
         </div>
       </div>
     );
   }
 
-  const stockStatus = product.inventory === 0 
-    ? { text: "Out of Stock", color: "text-red-400" }
-    : product.inventory < 5
-    ? { text: "Low Stock", color: "text-orange-400" }
-    : { text: "In Stock", color: "text-green-400" };
+  const stockStatus =
+    product.inventory === 0
+      ? { text: "Out of Stock", color: "text-red-400" }
+      : product.inventory < 5
+      ? { text: "Low Stock", color: "text-orange-400" }
+      : { text: "In Stock", color: "text-green-400" };
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -66,7 +71,9 @@ export default async function ProductDetail({
           <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-800">
             <div>
               <p className="text-3xl font-bold text-white">${product.price}</p>
-              <p className="text-sm text-gray-400 mt-1">Free shipping on orders over $50</p>
+              <p className="text-sm text-gray-400 mt-1">
+                Free shipping on orders over $50
+              </p>
             </div>
             <div className="text-right">
               <p className={`text-sm font-semibold ${stockStatus.color}`}>
@@ -80,11 +87,13 @@ export default async function ProductDetail({
 
           {/* Description */}
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-white mb-2">Description</h3>
-            <p className="text-gray-300 leading-relaxed">{product.description}</p>
+            <h3 className="text-lg font-semibold text-white mb-2">
+              Description
+            </h3>
+            <p className="text-gray-300 leading-relaxed">
+              {product.description}
+            </p>
           </div>
-
-
 
           {/* Additional Info */}
           <div className="mt-6 pt-6 border-t border-gray-800">
